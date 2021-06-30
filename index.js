@@ -168,6 +168,129 @@ animalContainer.get();
 //===================================================================================
 //===================================================================================
 
+/**
+ * Prototype pattern
+ * it's a pattern based on prototypical inheritance whereby objects created act as a
+ * prototype for other object, that is prototypes
+ * act as a blueprint for each object constructor created.
+ */
+
+// example 1
+//===================================================================================
+
+function Welcome(name) {
+  this.name = name;
+}
+
+// welcome prototype
+Welcome.prototype.sayHello = function () {
+  console.log("Hi " + this.name + "!");
+};
+
+function RoomService(name, order) {
+  // this.name will be set and made available on scope of this function
+  Welcome.call(this, name);
+  this.order = order;
+}
+
+// inherit 'sayHello()' from Welcome prototype
+RoomService.prototype = Object.create(Welcome.prototype);
+
+// by default prototype object has constructor property
+// but as we created new object withouut this property we need to set it manually
+// otherwise 'constructor' property of 'RoomService' will point to 'Welcome' constructor function
+RoomService.prototype.constructor = RoomService;
+
+// 'RoomService' methods that will be available to it's instances
+RoomService.prototype.announceDelivery = function () {
+  console.log("Your " + this.order + " has arrived!");
+};
+
+RoomService.prototype.deliverOrder = function () {
+  console.log(this.sayHello() + " " + this.announceDelivery());
+};
+
+const delivery = new RoomService("Max", "Pizza");
+
+delivery.sayHello();
+
+delivery.deliverOrder();
+
+delivery.announceDelivery();
+
+// example 2
+//===================================================================================
+
+const personPrototype = {
+  sayHi: function () {
+    console.log(
+      "Hello my name is " + this.name + " and my age is " + this.age + "."
+    );
+  },
+  sayBye: function () {
+    console.log("Bye Bye.");
+  },
+};
+
+// Person class
+function Person(name, age) {
+  name = name || "John Doe";
+  age = age || 30;
+
+  // constructor function
+  function constructorFunction(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  constructorFunction.prototype = personPrototype;
+
+  // every time we call Person function new instance is created
+  const instance = new constructorFunction(name, age);
+
+  return instance;
+}
+
+const person1 = Person("Max", 33);
+const person2 = Person("Kaleb", 30);
+
+person1.sayHi();
+person2.sayHi();
+person2.sayBye();
+
+/**
+ * Revealing Prototype pattern
+ * prototype is an object and we can prefix it with an
+ * function to reveal only thing we want user to see
+ */
+
+function personPrototype1() {
+  function sayHi() {
+    console.log("Hi my name is " + this.firstName);
+  }
+
+  return {
+    hello: sayHi,
+  };
+}
+
+function Person(firstName) {
+  firstName = firstName || "Boby";
+
+  function ConstructorFunction(firstName) {
+    this.firstName = firstName;
+  }
+
+  ConstructorFunction.prototype = personPrototype1();
+
+  const instance = new ConstructorFunction(firstName);
+
+  return instance;
+}
+
+const person3 = Person("Charlie Brown");
+person3.hello();
+
 //===================================================================================
 //===================================================================================
 //===================================================================================
