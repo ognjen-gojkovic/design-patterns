@@ -294,6 +294,51 @@ person3.hello();
 //===================================================================================
 //===================================================================================
 //===================================================================================
+
+/**
+ * Singleton pattern
+ * is used when we only need to have one instance of object
+ */
+
+// singleton with module pattern and IIFE
+const MyPerson = (function () {
+  // single instance of person
+  let instance;
+
+  // person function constructor
+  function Person(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  Person.prototype.sayHi = function () {
+    console.log(
+      "Hi my name is " + this.name + " and I am " + this.age + " years old."
+    );
+  };
+
+  //
+  function createInstance(name, age) {
+    let person = new Person(name, age);
+
+    return person;
+  }
+
+  return {
+    getInstance: function (name, age) {
+      if (!instance) {
+        instance = createInstance(name, age);
+      }
+      return instance;
+    },
+  };
+})();
+
+const person11 = MyPerson.getInstance("Dave", 31);
+const person12 = MyPerson.getInstance("Max", 27);
+person11.sayHi();
+person12.sayHi();
+
 //===================================================================================
 //===================================================================================
 //===================================================================================
@@ -303,3 +348,13 @@ person3.hello();
 //===================================================================================
 //===================================================================================
 //===================================================================================
+
+/*
+function recursion(number) {
+  if (number < 1) return 0;
+  else return number + recursion(number - 1);
+}
+
+const fact = recursion(25);
+console.log(fact);
+*/
