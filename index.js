@@ -342,6 +342,97 @@ person12.sayHi();
 //===================================================================================
 //===================================================================================
 //===================================================================================
+
+/**
+ * Factory pattern
+ *
+ */
+
+// example 1
+//===================================================================================
+
+// behaviour factory
+function makeSound(state) {
+  const sound = state.sound || "Grunt";
+
+  return {
+    speak: function () {
+      console.log(state.name + " says " + sound + ".");
+    },
+  };
+}
+
+function moving(state) {
+  return {
+    move: function () {
+      console.log(state.name + " is walking.");
+    },
+    hop: function () {
+      console.log(state.name + " is hopping.");
+    },
+  };
+}
+
+// object factory
+const person = function (name, age) {
+  const state = {
+    name: name,
+    age: age,
+    sound: "Hello",
+  };
+
+  return Object.assign({}, makeSound(state), moving(state));
+};
+
+const rabbit = function (name) {
+  const state = {
+    name: name,
+  };
+
+  return Object.assign({}, moving(state));
+};
+
+const max = person("Max", 32);
+max.speak();
+max.move();
+
+const joeTheRabbit = rabbit("Joe", 5);
+joeTheRabbit.hop();
+
+// example 2
+// abstract factory pattern
+//===================================================================================
+function Car() {
+  (this.name = "Car"), (this.wheels = 4);
+}
+function Truck() {
+  (this.name = "Truck"), (this.wheels = 6);
+}
+function Bike() {
+  (this.name = "Bike"), (this.wheels = 2);
+}
+
+const vehicleFactory = {
+  createVehicle: function (type) {
+    switch (type) {
+      case "car":
+        return new Car();
+      case "truck":
+        return new Truck();
+      case "bike":
+        return new Bike();
+
+      default:
+        return null;
+    }
+  },
+};
+
+const car = vehicleFactory.createVehicle("car");
+const bike = vehicleFactory.createVehicle("bike");
+const truck = vehicleFactory.createVehicle("truck");
+console.log(car, bike, truck);
+
 //===================================================================================
 //===================================================================================
 //===================================================================================
