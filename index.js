@@ -436,6 +436,92 @@ console.log(car, bike, truck);
 //===================================================================================
 //===================================================================================
 //===================================================================================
+/**
+ * Observer pattern
+ * we have some 'News Site' that is our 'subject', and it
+ * has some kind of observer list to which we attach our observers,
+ * and observers would be users of that site, those users have some kind of notification function
+ * that is called by 'New site' every time some new event happens, and with that it notifies our observer(user) about that event
+ *
+ * subject = new Subject()
+ * user = new User()
+ * user.notify = function(){...} => function that will be called by subject when event happens and it will notify user, send email...
+ *
+ * subject.user = user
+ * subject user.notify()  // notifies user
+ */
+
+// object we are observing
+const Subject = function () {
+  const observers = [];
+
+  function subscribeObserver(observer) {
+    observers.push(observer);
+  }
+  function unsubscribeObserver(observer) {
+    let index = observers.indexOf(observer);
+    if (index > -1) {
+      observers.splice(index, 1);
+    }
+  }
+  function notifyObserver(observer) {
+    let index = observers.indexOf(observer);
+    if (index > -1) {
+      observers[index].notify(index);
+    }
+  }
+  function notifyAllObservers() {
+    for (let i = 0; i < observers.length; i++) {
+      observers[i].notify(i);
+    }
+  }
+
+  return {
+    subscribeObserver,
+    unsubscribeObserver,
+    notifyObserver,
+    notifyAllObservers,
+  };
+};
+
+const Observer = function () {
+  return {
+    notify: function (index) {
+      console.log("Observer " + index + " has been notified.");
+    },
+  };
+};
+
+// subject observers are watching
+const subject1 = new Subject();
+
+// observers
+const observer0 = new Observer();
+const observer1 = new Observer();
+const observer2 = new Observer();
+const observer3 = new Observer();
+
+subject1.subscribeObserver(observer0);
+subject1.subscribeObserver(observer1);
+subject1.subscribeObserver(observer2);
+subject1.subscribeObserver(observer3);
+
+subject1.notifyObserver(observer2);
+
+subject1.notifyAllObservers();
+
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
+//===================================================================================
 //===================================================================================
 //===================================================================================
 //===================================================================================
