@@ -513,6 +513,71 @@ subject1.notifyAllObservers();
 //===================================================================================
 //===================================================================================
 //===================================================================================
+// DECORATOR PATTERN
+
+/**
+ * it's strucural design pattern that promotes code reuse,
+ * this pattern allows BEHAVIOUR to be added to individual object dynamically,
+ * without affecting behaviour of other object created from the same class
+ */
+
+// DECORATIOR
+// example 1
+
+function Vehicle(type) {
+  this.type = type || "default";
+  this.model = model || "default model";
+}
+
+// normal instance of the class
+const car = new Vehicle("car");
+console.log(car);
+
+const truck = new Vehicle("truck");
+/**
+ * we define methods on this instance that are only applicable only to this instance
+ */
+truck.setModel = function (model) {
+  this.model = model;
+};
+
+truck.setColor = function (color) {
+  this.color = color;
+};
+truck.setModel("MAN");
+truck.setColor("blue");
+
+console.log(truck);
+
+// example 2
+const allArgsValid = function (fn) {
+  return function (...args) {
+    if (args.length != fn.length) {
+      throw new Error("Only submit required number of params");
+    }
+    const validArgs = args.filter((arg) => Number.isInteger(arg));
+    if (validArgs.length < fn.length) {
+      throw new TypeError("Argument cannot be a non-integer");
+    }
+    return fn(...args);
+  };
+};
+
+//decorated multiply function that only accepts the required number of params and only integers
+multiply = allArgsValid(multiply);
+
+multiply(6, 8);
+//48
+
+multiply(6, 8, 7);
+//Error: Only submit required number of params
+
+multiply(3, null);
+//TypeError: Argument cannot be a non-integer
+
+multiply("", 4);
+//TypeError: Argument cannot be a non-integer
+
 //===================================================================================
 //===================================================================================
 //===================================================================================
